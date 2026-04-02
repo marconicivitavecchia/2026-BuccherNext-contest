@@ -29,10 +29,12 @@ bucchero-code/
 - HTML5 / CSS3 / JavaScript vanilla (nessuna dipendenza esterna)
 - [Sketchfab Embed API](https://sketchfab.com) per il viewer 3D
 - GitHub Pages per l'hosting
+- [Bando BuccheroNext](https://www.ufficioscolasticoregionalelazio.it/wp-content/uploads/2026/03/Bando-Bucchero-Next_Firmato.pdf) della Regione Lazio
+
 
 ## Ringraziamenti
 
-- MAAM di Grosseto e SABAP per il supporto e la disponibilità
+- MAAM di Grosseto e SABAP per il modello 3D del bucchero
 - Sketchfab per la piattaforma di visualizzazione 3D
 
 ---
