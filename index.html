@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bucchero Kantharos — Digital Experience</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0a0a0a;
+      --surface:  #141414;
+      --border:   #2a2a2a;
+      --gold:     #c8902a;
+      --gold-lt:  #e8b050;
+      --text:     #d4cfc8;
+      --muted:    #7a736a;
+      --radius:   8px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* ── HEADER ─────────────────────────────────── */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 1.5rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+
+    header h1 {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(1rem, 3.5vw, 1.5rem);
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    header h1 span {
+      color: var(--muted);
+      font-size: 0.75em;
+      letter-spacing: 0.08em;
+      display: block;
+      text-align: center;
+      margin-top: 2px;
+    }
+
+    /* ── AUDIO BUTTON ───────────────────────────── */
+    #audio-btn {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      z-index: 100;
+      background: rgba(20, 20, 20, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      color: var(--gold);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.8rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      backdrop-filter: blur(6px);
+      transition: border-color 0.2s, color 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #audio-btn:hover { border-color: var(--gold); }
+    #audio-btn.muted { color: var(--muted); }
+    #audio-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    /* ── VIEWER ─────────────────────────────────── */
+    .viewer-wrap {
+      width: 100%;
+      height: 70vh;
+      min-height: 320px;
+      background: #080808;
+      position: relative;
+    }
+
+    .viewer-wrap iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* ── MAIN CONTENT ───────────────────────────── */
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+    }
+
+    /* ── INFO SECTION ───────────────────────────── */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    @media (max-width: 600px) {
+      .info-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    }
+
+    .info-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+
+    .lang-badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      border-radius: 3px;
+      padding: 0.1rem 0.45rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .info-card h2 {
+      font-family: Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--gold-lt);
+      margin-bottom: 0.6rem;
+    }
+
+    .info-card p {
+      color: var(--text);
+      font-size: 0.92rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .info-card .meta {
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin-top: 0.75rem;
+    }
+
+    /* ── GALLERY ────────────────────────────────── */
+    .gallery-title {
+      font-family: Georgia, serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 3rem;
+    }
+
+    @media (max-width: 600px) {
+      .gallery { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .gallery figure {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .gallery img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      display: block;
+      transition: opacity 0.2s;
+    }
+
+    .gallery img:hover { opacity: 0.85; }
+
+    .gallery figcaption {
+      font-size: 0.72rem;
+      color: var(--muted);
+      padding: 0.4rem 0.6rem;
+      text-align: center;
+    }
+
+    /* ── PROJECT SECTION ────────────────────────── */
+    .project-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .project-section h3 {
+      font-family: Georgia, serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+
+    .step {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      background: var(--gold);
+      color: #000;
+      font-size: 0.75rem;
+      font-weight: 700;
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .step p {
+      font-size: 0.85rem;
+      color: var(--text);
+    }
+
+    /* ── FOOTER ─────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    footer p {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 0.3rem;
+    }
+
+    footer a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    footer a:hover { text-decoration: underline; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2.5rem 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Audio (autoplay, loop) -->
+  <audio id="bg-audio" autoplay loop preload="auto">
+    <source src="assets/audio/output.mp3" type="audio/mpeg">
+    <source src="assets/audio/output.webm" type="audio/webm">
+  </audio>
+
+  <!-- Floating audio toggle -->
+  <button id="audio-btn" aria-label="Mute / Unmute audio">
+    <!-- Speaker icon (on) -->
+    <svg id="icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+    </svg>
+    <!-- Speaker icon (muted) -->
+    <svg id="icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+      <line x1="23" y1="9" x2="17" y2="15"/>
+      <line x1="17" y1="9" x2="23" y2="15"/>
+    </svg>
+    <span id="audio-label">Audio</span>
+  </button>
+
+  <!-- Header -->
+  <header>
+    <h1>
+      Bucchero Kantharos
+      <span>Digital Experience &mdash; Bucchero Next</span>
+    </h1>
+  </header>
+
+  <!-- 3D Viewer -->
+  <div class="viewer-wrap">
+    <iframe
+      title="Bucchero Kantharos 3D Model"
+      src="https://sketchfab.com/models/80361348b89b400abe93dd7dfd8ac5a5/embed?autostart=1&autospin=0.3&ui_theme=dark&ui_infos=0&ui_watermark_link=0"
+      allow="autoplay; fullscreen; xr-spatial-tracking"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+  <main>
+
+    <!-- Info bilingue -->
+    <div class="info-grid">
+      <div class="info-card">
+        <span class="lang-badge">IT</span>
+        <h2>Kantharos in bucchero</h2>
+        <p>
+          Coppa carenata su piede a tromba con anse a nastro. Prima met&agrave; del VI secolo a.C.
+          Il bucchero &egrave; una ceramica etrusca caratteristica, di colore nero-grigio brillante,
+          ottenuta con una cottura in ambiente riducente.
+        </p>
+        <p>
+          Questo esemplare proviene dalle collezioni del
+          <strong>MAAM di Grosseto</strong> (n. catalogo 163492).
+          Il modello 3D &egrave; stato acquisito con RealityScan su 381 immagini.
+        </p>
+        <p class="meta">Prima met&agrave; VI sec. a.C. &mdash; Cat. 163492, MAAM Grosseto</p>
+      </div>
+
+      <div class="info-card">
+        <span class="lang-badge">EN</span>
+        <h2>Bucchero Kantharos</h2>
+        <p>
+          Carinated bowl on trumpet foot with overhanging ribbon handles. First half of the 6th century BC.
+          Bucchero is a distinctive Etruscan ceramic ware with a characteristic shiny black-grey surface,
+          achieved through reduction firing.
+        </p>
+        <p>
+          This specimen belongs to the collections of the
+          <strong>MAAM in Grosseto</strong> (catalog no. 163492).
+          The 3D model was captured using RealityScan from 381 photographs.
+        </p>
+        <p class="meta">First half of 6th century BC &mdash; Cat. 163492, MAAM Grosseto</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Gallery -->
+    <p class="gallery-title">Il percorso &mdash; The Process</p>
+    <div class="gallery">
+      <figure>
+        <img src="assets/images/stampa3D-bucchero.jpeg" alt="Stampa 3D del kantharos" loading="lazy">
+        <figcaption>Stampa 3D / 3D Print</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/images/stampa3D-NFC.jpeg" alt="Tag NFC applicato all'interno" loading="lazy">
+        <figcaption>Tag NFC applicato / NFC tag applied</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/images/stampa3D-bucchero-ornato.jpeg" alt="Modello dipinto e ornato" loading="lazy">
+        <figcaption>Modello ornato / Painted replica</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/images/disegno-bucchero-ornato.jpeg" alt="Disegno a matita del bucchero" loading="lazy">
+        <figcaption>Disegno / Drawing</figcaption>
+      </figure>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Come funziona -->
+    <div class="project-section">
+      <h3>Come funziona &mdash; How it works</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <p>Acquisizione fotogrammetrica del vaso con RealityScan (381 foto)</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <p>Stampa 3D a filamento PLA del modello</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <p>Tag NFC adesivo applicato all&rsquo;interno della coppa</p>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <p>Avvicinare il telefono: si apre questa pagina con il modello 3D e l&rsquo;audio</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>
+      Modello 3D: <a href="https://sketchfab.com/3d-models/bucchero-kantharos-80361348b89b400abe93dd7dfd8ac5a5" target="_blank" rel="noopener">Sketchfab &mdash; Bucchero Kantharos</a>
+    </p>
+    <p>
+      Ringraziamenti al personale del MAAM di Grosseto e alla SABAP per il supporto.
+    </p>
+    <p style="margin-top:0.6rem">
+      Progetto <strong style="color:var(--gold)">Bucchero Next</strong> &mdash; Percorso B TEENS, Opzione 4 Digital Experience
+    </p>
+  </footer>
+
+  <script>
+    const audio = document.getElementById('bg-audio');
+    const btn   = document.getElementById('audio-btn');
+    const iconOn  = document.getElementById('icon-on');
+    const iconOff = document.getElementById('icon-off');
+    const label   = document.getElementById('audio-label');
+
+    let started = false;
+
+    function setMuted(muted) {
+      audio.muted = muted;
+      btn.classList.toggle('muted', muted);
+      iconOn.style.display  = muted ? 'none' : '';
+      iconOff.style.display = muted ? '' : 'none';
+      label.textContent = muted ? 'Muted' : 'Audio';
+    }
+
+    // Try autoplay; if blocked show play prompt
+    function tryAutoplay() {
+      audio.muted = false;
+      const p = audio.play();
+      if (p !== undefined) {
+        p.then(() => {
+          started = true;
+          setMuted(false);
+        }).catch(() => {
+          // Autoplay blocked: show "tap to play" state
+          setMuted(true);
+          label.textContent = 'Play';
+          btn.title = 'Tap to start audio';
+        });
+      }
+    }
+
+    btn.addEventListener('click', () => {
+      if (!started) {
+        audio.play().then(() => { started = true; setMuted(false); });
+      } else {
+        setMuted(!audio.muted);
+      }
+    });
+
+    // Attempt autoplay after a short delay (gives browser time to settle)
+    window.addEventListener('load', () => setTimeout(tryAutoplay, 400));
+  </script>
+
+</body>
+</html>
