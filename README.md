@@ -20,7 +20,8 @@ bucchero-code/
 ├── index.html          # Pagina principale (target NFC / GitHub Pages)
 ├── assets/
 │   ├── audio/          # Traccia audio (mp3 + webm)
-│   └── images/         # Foto del processo (stampa, NFC, dipinto, disegno)
+│   ├── images/         # Foto del processo (stampa, NFC, dipinto, disegno)
+│   └── print/          # File di stampa 3D (bucchero.3mf)
 └── README.md
 ```
 
