@@ -25,6 +25,10 @@ bucchero-code/
 └── README.md
 ```
 
+## Video di presentazione
+
+[Guarda il video di presentazione del progetto](assets/video/video.mp4)
+
 ## Tecnologie
 
 - HTML5 / CSS3 / JavaScript vanilla (nessuna dipendenza esterna)
